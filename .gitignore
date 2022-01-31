@@ -1,0 +1,7 @@
+/venv
+
+.env
+/.idea
+src/notebooks/.ipynb_checkpoints
+
+__pycache__/
