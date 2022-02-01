@@ -2,3 +2,7 @@ pymongo
 pandas
 numpy
 python-dotenv
+sklearn
+seaborn
+matplotlib
+plotly
