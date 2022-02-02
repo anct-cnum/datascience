@@ -9,8 +9,7 @@ def connect_db():
     try:
         client = MongoClient(port=int(os.environ.get('MONGO_PORT')), host=os.environ.get('MONGO_HOTE'))
         db = client[os.environ.get('MONGO_DATABASE')]
-
-        print("server version:", client.server_info()["version"])
+        print("données récupérer avec succès")
 
         return db
 
