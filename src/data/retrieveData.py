@@ -2,11 +2,11 @@ import statistics
 from collections import Counter
 import pymongo
 from datetime import datetime
-from ..mongodb import connect_db
+from ..mongodb import connect_db_datalake
 
 
 def create_dataframe():
-    db = connect_db()
+    db = connect_db_datalake()
     data_conseiller = []
     datetime_today = datetime.now()
     conseillers = db.conseillers.find({
@@ -46,7 +46,8 @@ def create_dataframe():
             "anciennete": nbDayCreate.days,
             "nbJourLastCra": nb_day_last_cra,
             "meanCraBySemaine": mean_cra_by_week,
-            "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None
+            "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None,
+            "countCra": count_cras_conseiller
         })
 
     return data_conseiller
