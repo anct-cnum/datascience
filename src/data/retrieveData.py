@@ -40,7 +40,7 @@ def create_dataframe():
             if len(countNbCraByWeek) > 0:
                 mean_cra_by_week = sum(countNbCraByWeek.values()) / datetime_today.isocalendar()[1]
 
-        nbDayCreate = datetime_today - conseiller["createdAt"]
+        nbDayCreate = datetime_today - conseiller["datePrisePoste"]
         data_conseiller.append({
             "conseiller_id": conseiller_id,
             "anciennete": nbDayCreate.days,
