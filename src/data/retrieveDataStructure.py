@@ -6,6 +6,7 @@ from datetime import datetime
 import pymongo
 from bson import DBRef
 from ..mongodb import connect_db_prod
+from dateutil.relativedelta import relativedelta
 
 
 def create_dataframe_with_structure():
@@ -16,10 +17,11 @@ def create_dataframe_with_structure():
         'statut': {'$eq': 'finalisee'},
         '$and': [
             {'conseillerObj.dateFinFormation': {'$ne': None}},
-            {'conseillerObj.dateFinFormation': {'$lt': datetime_today}},
+            {'conseillerObj.dateFinFormation': {'$lt': datetime_today - relativedelta(months=1)}},
             {'dateRecrutement': {'$lt': datetime_today}}
         ]
     })
+
     for mise in mise_en_relation:
         conseiller_id = mise['conseillerObj']['_id']
         count_cras_conseiller = db.cras.count_documents(
@@ -28,7 +30,7 @@ def create_dataframe_with_structure():
         est_labelliser = mise['structureObj']['estLabelliseFranceServices']
         code_region = mise['structureObj']['codeRegion']
         qpv = mise['structureObj']['qpvStatut'] if mise['structureObj'].get('qpvStatut') else None
-        nbDayCreate = datetime_today - mise['conseillerObj']["createdAt"]
+        nbDayCreate = datetime_today - mise['conseillerObj']["dateFinFormation"]
         nb_day_last_cra = None
         number_of_week = []
         freq_between_cra = []
