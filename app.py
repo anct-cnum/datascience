@@ -34,7 +34,7 @@ def jobs_create_modele():
     result = result.fillna(0)
     result['cluster'] = result['cluster'].astype('Int64')
     for index, conseiller in result.iterrows():
-        db.conseillers.update_one({'_id': ObjectId(conseiller['conseiller_id'])},
+        db.conseillersTestQuentin.update_one({'_id': ObjectId(conseiller['conseiller_id'])},
                                   {'$set': {"groupeCRA": conseiller['cluster']}})
 
 
