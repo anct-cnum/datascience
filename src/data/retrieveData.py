@@ -75,7 +75,7 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
         "conseiller_id": conseiller["_id"],
         "nom": conseiller["nom"],
         "prenom": conseiller["prenom"],
-        "email": conseiller["email"],
+        "email": conseiller["emailCN"]["address"],
         "anciennete": nbDayCreate.days,
         "nbJourLastCra": nb_day_last_cra,
         "meanCraBySemaine": mean_cra_by_week,
@@ -108,6 +108,7 @@ def create_dataframe_prod():
         'statut': {'$eq': 'RECRUTE'},
         '$and': [
             {'dateFinFormation': {'$ne': None}},
+            {'emailCN.address': { "$exists": "false" }},
             {'dateFinFormation': {'$lt': datetime_today - relativedelta(months=1)}}
         ]
     })

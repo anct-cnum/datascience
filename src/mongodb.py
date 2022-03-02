@@ -9,7 +9,6 @@ def connect_db_datalake():
     try:
         client = MongoClient(port=int(os.environ.get('MONGO_PORT')), host=os.environ.get('MONGO_HOTE'))
         db = client[os.environ.get('MONGO_DATABASE_DATALAKE')]
-        print("données récupérer avec succès sur le datalake")
 
         return db
 
@@ -23,9 +22,14 @@ def connect_db_datalake():
 
 def connect_db_prod():
     try:
-        client = MongoClient(port=int(os.environ.get('MONGO_PORT')), host=os.environ.get('MONGO_HOTE'))
+        client = MongoClient(
+            port=int(os.environ.get('MONGO_PORT')),
+            host=os.environ.get('MONGO_HOTE'),
+            username=os.environ.get('MONGO_USER'),
+            password=os.environ.get('MONGO_PASSWORD'),
+            authSource=os.environ.get('MONGO_DATABASE_PROD')
+        )
         db = client[os.environ.get('MONGO_DATABASE_PROD')]
-        print("données récupérer avec succès sur la prod")
 
         return db
 
