@@ -46,3 +46,6 @@ def jobs_create_modele():
 scheduler = BackgroundScheduler(timezone="Europe/Berlin")
 job = scheduler.add_job(jobs_create_modele, trigger='cron', minute='*/15')
 scheduler.start()
+
+if __name__ == "__main__":
+    app.run()
