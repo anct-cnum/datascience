@@ -9,7 +9,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 
-
+@app.route('/')
 def app(environ, start_response):
     data = b"Hello, World!\n"
     start_response("200 OK", [
@@ -46,6 +46,3 @@ def jobs_create_modele():
 scheduler = BackgroundScheduler(timezone="Europe/Berlin")
 job = scheduler.add_job(jobs_create_modele, trigger='cron', minute='*/15')
 scheduler.start()
-
-if __name__ == "__main__":
-    app.run()
