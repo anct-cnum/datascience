@@ -10,9 +10,14 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
 
-@app.route('/')
-def main():
-    return 'flask'
+def app(environ, start_response):
+    data = b"Hello, World!\n"
+    start_response("200 OK", [
+        ("Content-Type", "text/plain"),
+        ("Content-Length", str(len(data)))
+    ])
+
+    return iter([data])
 
 
 def jobs_create_modele():
@@ -35,11 +40,9 @@ def jobs_create_modele():
     result['cluster'] = result['cluster'].astype('Int64')
     for index, conseiller in result.iterrows():
         db.conseillersTestQuentin.update_one({'_id': ObjectId(conseiller['conseiller_id'])},
-                                  {'$set': {"groupeCRA": conseiller['cluster']}})
+                                             {'$set': {"groupeCRA": conseiller['cluster']}})
 
 
 scheduler = BackgroundScheduler(timezone="Europe/Berlin")
 job = scheduler.add_job(jobs_create_modele, trigger='cron', minute='*/15')
 scheduler.start()
-if __name__ == "__main__":
-    app.run()
