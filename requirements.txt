@@ -7,5 +7,6 @@ seaborn
 matplotlib
 python-dateutil
 Flask
-gunicorn[eventlet]
+gunicorn
+eventlet
 Flask-APScheduler
