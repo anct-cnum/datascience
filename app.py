@@ -19,10 +19,9 @@ def test():
     print("allo")
 
 
-scheduler = BackgroundScheduler(timezone="Europe/Berlin")
-job = scheduler.add_job(test, trigger='cron', minute='*/10')
-scheduler.start()
-
-
 if __name__ == '__main__':
+    scheduler = BackgroundScheduler(timezone="Europe/Berlin")
+    scheduler.init_app(app)
+    scheduler.add_job(test, trigger='cron', minute='*/10')
+    scheduler.start()
     app.run()
