@@ -8,5 +8,4 @@ matplotlib
 python-dateutil
 Flask
 gunicorn
-eventlet
 Flask-APScheduler
