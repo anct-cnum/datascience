@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_apscheduler import APScheduler
 
+app = Flask(__name__)
+
 
 class Config:
     """App configuration."""
@@ -18,6 +20,11 @@ class Config:
     SCHEDULER_API_ENABLED = True
 
 
+@app.route('/test')
+def index():
+    return 'Hello, World!'
+
+
 def job1(var_one, var_two):
     """Demo job function.
     :param var_two:
@@ -25,14 +32,10 @@ def job1(var_one, var_two):
     """
     print(str(var_one) + " " + str(var_two))
 
-if __name__ == '__main__':
-    app = Flask(__name__)
-    app.config.from_object(Config())
 
+if __name__ == '__main__':
+    app.config.from_object(Config())
     scheduler = APScheduler()
-    # it is also possible to enable the API directly
-    # scheduler.api_enabled = True  # noqa: E800
     scheduler.init_app(app)
     scheduler.start()
-
     app.run()
