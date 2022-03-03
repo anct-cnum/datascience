@@ -6,12 +6,14 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
 from src.mongodb import connect_db_prod
 from src.data.retrieveData import create_dataframe_prod
+
 app = Flask(__name__)
 
 
 @app.route('/test')
 def index():
     return 'Hello, World!'
+
 
 def jobs_create_modele():
     db = connect_db_prod()
@@ -36,10 +38,13 @@ def jobs_create_modele():
                                              {'$set': {"groupeCRA": conseiller['cluster']}})
 
 
-scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
-job = scheduler.add_job(jobs_create_modele, trigger='cron', minute='*/15')
-scheduler.start()
+# scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
+# job = scheduler.add_job(jobs_create_modele, trigger='cron', minute='*/15')
+# scheduler.start()
 
 
 if __name__ == '__main__':
+    scheduler = APScheduler()
+    scheduler.app_job(id='Description of cron job', func=jobs_create_modele, trigger='cron', minute='*/15')
+    scheduler.start()
     app.run()
