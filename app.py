@@ -30,6 +30,7 @@ def index():
     return 'Hello, World!'
 
 
+@scheduler.task('cron', id='do_job_1', minute='*/15')
 def jobs_create_modele():
     db = connect_db_prod()
     data_conseillers = create_dataframe_prod()
@@ -54,8 +55,9 @@ def jobs_create_modele():
 
 
 if __name__ == '__main__':
-    app.config.from_object(Config())
+    # app.config.from_object(Config())
     scheduler = APScheduler()
     scheduler.init_app(app)
     scheduler.start()
+    scheduler.add_job()
     app.run()
