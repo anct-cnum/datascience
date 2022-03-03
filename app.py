@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_apscheduler import APScheduler
-
 import pandas as pd
 from bson import ObjectId
 from sklearn.cluster import KMeans
@@ -17,8 +16,4 @@ def index():
 
 
 if __name__ == '__main__':
-    #scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
-    #scheduler.init_app(app)
-    #scheduler.add_job(test, trigger='cron', minute='*/10')
-    #scheduler.start()
     app.run()
