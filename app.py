@@ -21,8 +21,8 @@ def test():
 
 
 if __name__ == '__main__':
-    scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
-    scheduler.init_app(app)
-    scheduler.add_job(test, trigger='cron', minute='*/10')
-    scheduler.start()
+    #scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
+    #scheduler.init_app(app)
+    #scheduler.add_job(test, trigger='cron', minute='*/10')
+    #scheduler.start()
     app.run()
