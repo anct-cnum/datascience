@@ -20,24 +20,12 @@ class Config:
 def index():
     return 'Hello, World!'
 
-# interval examples
-@scheduler.task("interval", id="do_job_1", seconds=30, misfire_grace_time=900)
-def job1():
-    """Sample job 1."""
-    print("Job 1 executed")
-
 
 # cron examples
 @scheduler.task("cron", id="do_job_2", minute="*")
 def job2():
     """Sample job 2."""
     print("Job 2 executed")
-
-
-@scheduler.task("cron", id="do_job_3", week="*", day_of_week="sun")
-def job3():
-    """Sample job 3."""
-    print("Job 3 executed")
 
 
 if __name__ == '__main__':
