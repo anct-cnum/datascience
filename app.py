@@ -1,6 +1,6 @@
 from flask import Flask
+from flask_apscheduler import APScheduler
 
-#app = Flask(__name__)
 
 class Config:
     """App configuration."""
@@ -17,9 +17,6 @@ class Config:
 
     SCHEDULER_API_ENABLED = True
 
-#@app.route('/test')
-#def index():
- #   return 'Hello, World!'
 
 def job1(var_one, var_two):
     """Demo job function.
