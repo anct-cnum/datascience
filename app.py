@@ -16,10 +16,6 @@ def index():
     return 'Hello, World!'
 
 
-def test():
-    print("allo")
-
-
 if __name__ == '__main__':
     #scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
     #scheduler.init_app(app)
