@@ -7,5 +7,5 @@ seaborn
 matplotlib
 python-dateutil
 Flask
-
 gunicorn
+Flask-APScheduler
