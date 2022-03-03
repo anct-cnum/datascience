@@ -8,6 +8,7 @@ from src.mongodb import connect_db_prod
 from src.data.retrieveData import create_dataframe_prod
 
 app = Flask(__name__)
+scheduler = APScheduler()
 
 
 class Config:
@@ -46,8 +47,6 @@ def jobs_create_modele():
 
 if __name__ == '__main__':
     app.config.from_object(Config())
-    scheduler = APScheduler()
     scheduler.init_app(app)
     scheduler.start()
-    scheduler.add_job()
     app.run()
