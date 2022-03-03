@@ -7,24 +7,12 @@ from sklearn.preprocessing import MinMaxScaler
 from src.mongodb import connect_db_prod
 from src.data.retrieveData import create_dataframe_prod
 
-class Config:
-    """App configuration."""
-
-    JOBS = [
-        {
-            "id": "jobs_create_modele",
-            "func": "jobs:jobs_create_modele",
-            "trigger": "cron",
-            "minute": "*/15",
-        }
-    ]
-
-    SCHEDULER_API_ENABLED = True
+app = Flask(__name__)
 
 
-# @app.route('/test')
-#def index():
-  #  return 'Hello, World!'
+@app.route('/test')
+def index():
+    return 'Hello, World!'
 
 
 def jobs_create_modele():
@@ -56,10 +44,4 @@ def jobs_create_modele():
 
 
 if __name__ == '__main__':
-    app = Flask(__name__)
-    app.config.from_object(Config())
-    scheduler = APScheduler()
-    #scheduler.app_job(id='Description of cron job', func=jobs_create_modele, trigger='cron', minute='*/15')
-    scheduler.init_app(app)
-    scheduler.start()
     app.run()
