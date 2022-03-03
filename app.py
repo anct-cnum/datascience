@@ -12,16 +12,6 @@ app = Flask(__name__)
 
 class Config:
     """App configuration."""
-
-    JOBS = [
-        {
-            "id": "jobs_create_modele",
-            "func": "jobs:jobs_create_modele",
-            "trigger": "cron",
-            "minute": "*/15"
-        }
-    ]
-
     SCHEDULER_API_ENABLED = True
 
 
@@ -55,7 +45,7 @@ def jobs_create_modele():
 
 
 if __name__ == '__main__':
-    # app.config.from_object(Config())
+    app.config.from_object(Config())
     scheduler = APScheduler()
     scheduler.init_app(app)
     scheduler.start()
