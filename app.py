@@ -1,5 +1,6 @@
 from flask import Flask
-from apscheduler.schedulers.background import BackgroundScheduler
+from flask_apscheduler import APScheduler
+
 import pandas as pd
 from bson import ObjectId
 from sklearn.cluster import KMeans
@@ -20,7 +21,7 @@ def test():
 
 
 if __name__ == '__main__':
-    scheduler = BackgroundScheduler(timezone="Europe/Berlin")
+    scheduler = APScheduler.BackgroundScheduler(timezone="Europe/Berlin")
     scheduler.init_app(app)
     scheduler.add_job(test, trigger='cron', minute='*/10')
     scheduler.start()
