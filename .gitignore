@@ -1,7 +1,7 @@
 /venv
-app/src/files
+src/files
 .env
 /.idea
-app/src/notebooks/.ipynb_checkpoints
+src/notebooks/.ipynb_checkpoints
 
 __pycache__/
