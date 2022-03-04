@@ -28,15 +28,15 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
             if index == (count_cras_conseiller - 1):
                 nb_day_last_cra = cra['createdAt']
 
-        countNbCraByWeek = Counter(number_of_week)
+        count_nb_cra_by_week = Counter(number_of_week)
         nb_day_last_cra = (datetime_today - nb_day_last_cra).days
-        if len(countNbCraByWeek) > 0:
-            mean_cra_by_week = sum(countNbCraByWeek.values()) / datetime_today.isocalendar()[1]
+        if len(count_nb_cra_by_week) > 0:
+            mean_cra_by_week = sum(count_nb_cra_by_week.values()) / datetime_today.isocalendar()[1]
 
-    nbDayCreate = datetime_today - conseiller["dateFinFormation"]
+    nb_day_create = datetime_today - conseiller["dateFinFormation"]
     return {
         "conseiller_id": conseiller["_id"],
-        "anciennete": nbDayCreate.days,
+        "anciennete": nb_day_create.days,
         "nbJourLastCra": nb_day_last_cra,
         "meanCraBySemaine": mean_cra_by_week,
         "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None,
@@ -65,18 +65,18 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
             if index == (count_cras_conseiller - 1):
                 nb_day_last_cra = cra['createdAt']
 
-        countNbCraByWeek = Counter(number_of_week)
+        count_nb_cra_by_week = Counter(number_of_week)
         nb_day_last_cra = (datetime_today - nb_day_last_cra).days
-        if len(countNbCraByWeek) > 0:
-            mean_cra_by_week = sum(countNbCraByWeek.values()) / datetime_today.isocalendar()[1]
+        if len(count_nb_cra_by_week) > 0:
+            mean_cra_by_week = sum(count_nb_cra_by_week.values()) / datetime_today.isocalendar()[1]
 
-    nbDayCreate = datetime_today - conseiller["dateFinFormation"]
+    nb_day_create = datetime_today - conseiller["dateFinFormation"]
     return {
         "conseiller_id": conseiller["_id"],
         "nom": conseiller["nom"],
         "prenom": conseiller["prenom"],
         "email": conseiller["emailCN"]["address"],
-        "anciennete": nbDayCreate.days,
+        "anciennete": nb_day_create.days,
         "nbJourLastCra": nb_day_last_cra,
         "meanCraBySemaine": mean_cra_by_week,
         "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None,
