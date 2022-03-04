@@ -5,11 +5,9 @@ from sklearn.preprocessing import MinMaxScaler
 from src.mongodb import connect_db_prod
 from src.data.retrieveData import create_dataframe_prod
 
-print("start jobs")
 db = connect_db_prod()
 data_conseillers = create_dataframe_prod()
 dataframe_conseiller = pd.DataFrame(data_conseillers)
-print(dataframe_conseiller)
 df_without_nan = dataframe_conseiller.dropna()
 df_train_modele = df_without_nan.drop(columns=['conseiller_id', 'nom', 'prenom', 'email'])
 df_train_modele[df_train_modele.columns] = MinMaxScaler().fit_transform(df_train_modele[df_train_modele.columns])
@@ -26,4 +24,4 @@ result = result.fillna(0)
 result['cluster'] = result['cluster'].astype('Int64')
 for index, conseiller in result.iterrows():
     db.conseillersTestQuentin.update_one({'_id': ObjectId(conseiller['conseiller_id'])},
-                                         {'$set': {"groupeCRA2": conseiller['cluster']}})
+                                         {'$set': {"groupeCRA": conseiller['cluster']}})

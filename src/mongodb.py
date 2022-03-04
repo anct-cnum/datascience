@@ -13,10 +13,7 @@ def connect_db_datalake():
         return db
 
     except errors.ServerSelectionTimeoutError as err:
-        # set the client instance to 'None' if exception
         client = None
-
-        # catch pymongo.errors.ServerSelectionTimeoutError
         print("pymongo ERROR:", err)
 
 
@@ -34,8 +31,5 @@ def connect_db_prod():
         return db
 
     except errors.ServerSelectionTimeoutError as err:
-        # set the client instance to 'None' if exception
         client = None
-
-        # catch pymongo.errors.ServerSelectionTimeoutError
         print("pymongo ERROR:", err)
