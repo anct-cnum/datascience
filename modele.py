@@ -26,4 +26,4 @@ result = result.fillna(0)
 result['cluster'] = result['cluster'].astype('Int64')
 for index, conseiller in result.iterrows():
     db.conseillersTestQuentin.update_one({'_id': ObjectId(conseiller['conseiller_id'])},
-                                         {'$set': {"groupeCRA": conseiller['cluster']}})
+                                         {'$set': {"groupeCRA2": conseiller['cluster']}})
