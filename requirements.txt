@@ -9,4 +9,4 @@ python-dateutil
 Flask
 uwsgi
 wheel
-Flask-APScheduler
+apscheduler
