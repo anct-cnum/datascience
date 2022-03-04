@@ -1,3 +1,3 @@
 [
-    "*/5 * * * * /usr/bin/python3 $ROOT/modele.py"
+    "*/10 * * * * python $ROOT/modele.py"
 ]
