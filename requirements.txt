@@ -9,4 +9,3 @@ python-dateutil
 Flask
 uwsgi
 wheel
-apscheduler
