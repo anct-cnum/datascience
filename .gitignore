@@ -1,5 +1,5 @@
 /venv
-
+src/files
 .env
 /.idea
 src/notebooks/.ipynb_checkpoints

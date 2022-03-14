@@ -2,3 +2,10 @@ pymongo
 pandas
 numpy
 python-dotenv
+sklearn
+seaborn
+matplotlib
+python-dateutil
+Flask
+uwsgi
+wheel
