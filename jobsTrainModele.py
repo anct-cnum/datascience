@@ -18,8 +18,8 @@ def checkChangeCluster(newCluster, oldCluster):
 db = connect_db_prod()
 data_conseillers = create_dataframe_prod()
 dataframe_conseiller = pd.DataFrame(data_conseillers)
-df_without_nan = dataframe_conseiller.dropna(subset=[column for column in dataframe_conseiller if column != 'groupeCRA'])
-df_train_modele = df_without_nan.drop(columns=['conseiller_id', 'nom', 'prenom', 'email', 'groupeCRA'])
+df_without_nan = dataframe_conseiller.dropna(subset=[column for column in dataframe_conseiller if column != 'groupeCRAHistorique'])
+df_train_modele = df_without_nan.drop(columns=['conseiller_id', 'nom', 'prenom', 'email', 'groupeCRAHistorique'])
 df_train_modele[df_train_modele.columns] = MinMaxScaler().fit_transform(df_train_modele[df_train_modele.columns])
 clf = KMeans(n_clusters=3)
 clf.fit(df_train_modele)
@@ -33,27 +33,56 @@ result.loc[
 result['cluster'] = result['cluster'].astype('Int64')
 datetime_today = datetime.now()
 for index, conseiller in result.iterrows():
-    if conseiller["groupeCRA"] is not None:
-        last_cluster = conseiller['groupeCRA'][-1]
+    if conseiller["groupeCRAHistorique"] is not None:
+        last_cluster = conseiller['groupeCRAHistorique'][-1]
         if last_cluster["numero"] != conseiller['cluster'] and checkChangeCluster(conseiller['cluster'], last_cluster["numero"]):
             db.conseillers.update_one(
                 {
+                    '_id': ObjectId(conseiller['conseiller_id'])
+                },
+                [{'$set': {
+                    'groupeCRAHistorique': {
+                        '$concatArrays': [
+                            {
+                                '$slice': [
+                                    "$groupeCRAHistorique",
+                                    { '$subtract': [{ '$size': "$groupeCRAHistorique"}, 1]}
+                                ],
+                            }, [{
+                                '$mergeObjects': [
+                                    {'$last': "$groupeCRAHistorique"},
+                                    {"nbJourDansCluster": (datetime_today - last_cluster["dateDeChangement"]).days}
+                                ]
+                            }]
+                        ]
+                    },
+                    "groupeCRA": conseiller['cluster']
+                }}])
+
+            db.conseillers.update_one(
+                {
                     '_id': ObjectId(conseiller['conseiller_id'])},
-                {'$push': {
-                    "groupeCRA": {
-                        "numero": conseiller['cluster'],
-                        "dateDeChangement": datetime_today,
-                        "nbJourDansCluster": (datetime_today - last_cluster["dateDeChangement"]).days
-                    }
-                }})
+                {
+                    '$push': {
+                        "groupeCRAHistorique": {
+                            "numero": conseiller['cluster'],
+                            "dateDeChangement": datetime_today,
+                        }
+                    }})
 
     else:
         db.conseillers.update_one(
             {
                 '_id': ObjectId(conseiller['conseiller_id'])},
-            {'$push': {
-                "groupeCRA": {
-                    "numero": conseiller['cluster'],
-                    "dateDeChangement": datetime_today,
-                }
-            }})
+            {'$set': {"groupeCRA": conseiller['cluster']}})
+
+        db.conseillers.update_one(
+            {
+                '_id': ObjectId(conseiller['conseiller_id'])},
+            {
+                '$push': {
+                    "groupeCRAHistorique": {
+                        "numero": conseiller['cluster'],
+                        "dateDeChangement": datetime_today,
+                    }
+                }})
