@@ -18,7 +18,7 @@ def checkChangeCluster(newCluster, oldCluster):
 db = connect_db_prod()
 data_conseillers = create_dataframe_prod()
 dataframe_conseiller = pd.DataFrame(data_conseillers)
-df_without_nan = dataframe_conseiller.dropna()
+df_without_nan = dataframe_conseiller.dropna(subset=[column for column in dataframe_conseiller if column != 'groupeCRA'])
 df_train_modele = df_without_nan.drop(columns=['conseiller_id', 'nom', 'prenom', 'email', 'groupeCRA'])
 df_train_modele[df_train_modele.columns] = MinMaxScaler().fit_transform(df_train_modele[df_train_modele.columns])
 clf = KMeans(n_clusters=3)
@@ -40,7 +40,7 @@ for index, conseiller in result.iterrows():
                 {
                     '_id': ObjectId(conseiller['conseiller_id'])},
                 {'$push': {
-                    "GroupeCRA2": {
+                    "groupeCRA": {
                         "numero": conseiller['cluster'],
                         "dateDeChangement": datetime_today,
                         "nbJourDansCluster": (datetime_today - last_cluster["dateDeChangement"]).days
@@ -52,7 +52,7 @@ for index, conseiller in result.iterrows():
             {
                 '_id': ObjectId(conseiller['conseiller_id'])},
             {'$push': {
-                "GroupeCRA2": {
+                "groupeCRA": {
                     "numero": conseiller['cluster'],
                     "dateDeChangement": datetime_today,
                 }

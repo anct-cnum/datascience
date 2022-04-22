@@ -72,7 +72,7 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
 
     nb_day_create = datetime_today - conseiller["dateFinFormation"]
     try:
-        groupeCRA = conseiller["GroupeCRA2"]
+        groupeCRA = conseiller["groupeCRA"]
     except KeyError:
         groupeCRA = None
 
