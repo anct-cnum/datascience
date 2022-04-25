@@ -18,6 +18,7 @@ def check_change_cluster(new_cluster, old_cluster):
 db = connect_db_prod()
 data_conseillers = create_dataframe_prod()
 dataframe_conseiller = pd.DataFrame(data_conseillers)
+print(dataframe_conseiller)
 df_without_nan = dataframe_conseiller.dropna(subset=[column for column in dataframe_conseiller if column != 'groupeCRAHistorique'])
 df_train_modele = df_without_nan.drop(columns=['conseiller_id', 'nom', 'prenom', 'email', 'groupeCRAHistorique'])
 df_train_modele[df_train_modele.columns] = MinMaxScaler().fit_transform(df_train_modele[df_train_modele.columns])
