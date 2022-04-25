@@ -46,9 +46,8 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
 
 def create_feature_cra_prod(conseiller, db, datetime_today):
     count_cras_conseiller = db.test_cras.count_documents(
-        {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))})
+        {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_TEST'))})
 
-    print(count_cras_conseiller)
     nb_day_last_cra = None
     number_of_week = []
     freq_between_cra = []
@@ -56,7 +55,7 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
     mean_cra_by_week = None
     if count_cras_conseiller > 0:
         cras_conseiller = db.test_cras.find(
-            {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))}).sort(
+            {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_TEST'))}).sort(
             'createdAt', pymongo.ASCENDING)
         for index, cra in enumerate(cras_conseiller):
             if temp_datetime is not None:
