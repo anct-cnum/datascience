@@ -51,7 +51,7 @@ for index, conseiller in result.iterrows():
                             }, [{
                                 '$mergeObjects': [
                                     {'$last': "$groupeCRAHistorique"},
-                                    {"nbJourDansCluster": (datetime_today - last_cluster["dateDeChangement"]).days}
+                                    {"nbJourDansGroupe": (datetime_today - last_cluster["dateDeChangement"]).days}
                                 ]
                             }]
                         ]
