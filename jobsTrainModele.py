@@ -36,7 +36,7 @@ for index, conseiller in result.iterrows():
     if conseiller["groupeCRAHistorique"] is not None:
         last_cluster = conseiller['groupeCRAHistorique'][-1]
         if last_cluster["numero"] != conseiller['cluster'] and check_change_cluster(conseiller['cluster'], last_cluster["numero"]):
-            db.conseillers.update_one(
+            db.test_conseillers.update_one(
                 {
                     '_id': ObjectId(conseiller['conseiller_id'])
                 },
