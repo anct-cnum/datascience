@@ -45,7 +45,7 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
 
 
 def create_feature_cra_prod(conseiller, db, datetime_today):
-    count_cras_conseiller = db.cras.count_documents(
+    count_cras_conseiller = db.test_cras.count_documents(
         {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))})
     nb_day_last_cra = None
     number_of_week = []
@@ -53,7 +53,7 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
     temp_datetime = None
     mean_cra_by_week = None
     if count_cras_conseiller > 0:
-        cras_conseiller = db.cras.find(
+        cras_conseiller = db.test_cras.find(
             {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))}).sort(
             'createdAt', pymongo.ASCENDING)
         for index, cra in enumerate(cras_conseiller):
@@ -71,6 +71,11 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
             mean_cra_by_week = sum(count_nb_cra_by_week.values()) / datetime_today.isocalendar()[1]
 
     nb_day_create = datetime_today - conseiller["dateFinFormation"]
+    try:
+        groupe_cra_historique = conseiller["groupeCRAHistorique"]
+    except KeyError:
+        groupe_cra_historique = None
+
     return {
         "conseiller_id": conseiller["_id"],
         "nom": conseiller["nom"],
@@ -80,7 +85,8 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
         "nbJourLastCra": nb_day_last_cra,
         "meanCraBySemaine": mean_cra_by_week,
         "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None,
-        "countCra": count_cras_conseiller
+        "countCra": count_cras_conseiller,
+        "groupeCRAHistorique": groupe_cra_historique
     }
 
 
@@ -104,7 +110,7 @@ def create_dataframe_prod():
     db = connect_db_prod()
     datetime_today = datetime.now()
     data_conseiller = []
-    conseillers = db.conseillers.find({
+    conseillers = db.test_conseillers.find({
         'statut': {'$eq': 'RECRUTE'},
         '$and': [
             {'dateFinFormation': {'$ne': None}},
@@ -112,6 +118,7 @@ def create_dataframe_prod():
             {'dateFinFormation': {'$lt': datetime_today - relativedelta(months=1)}}
         ]
     })
+
     for conseiller in conseillers:
         data_conseiller.append(create_feature_cra_prod(conseiller, db, datetime_today))
     return data_conseiller
