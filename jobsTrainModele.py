@@ -6,10 +6,10 @@ from src.mongodb import connect_db_prod
 from src.data.retrieveData import create_dataframe_prod
 from datetime import datetime
 
-def checkChangeCluster(newCluster, oldCluster):
-    if newCluster == 0 and oldCluster == 1:
+def check_change_cluster(new_cluster, old_cluster):
+    if new_cluster == 0 and old_cluster == 1:
         return False
-    elif newCluster == 1 and oldCluster == 0:
+    elif new_cluster == 1 and old_cluster == 0:
         return False
     else:
         return True
@@ -35,7 +35,7 @@ datetime_today = datetime.now()
 for index, conseiller in result.iterrows():
     if conseiller["groupeCRAHistorique"] is not None:
         last_cluster = conseiller['groupeCRAHistorique'][-1]
-        if last_cluster["numero"] != conseiller['cluster'] and checkChangeCluster(conseiller['cluster'], last_cluster["numero"]):
+        if last_cluster["numero"] != conseiller['cluster'] and check_change_cluster(conseiller['cluster'], last_cluster["numero"]):
             db.conseillers.update_one(
                 {
                     '_id': ObjectId(conseiller['conseiller_id'])
