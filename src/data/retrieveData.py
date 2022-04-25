@@ -72,9 +72,9 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
 
     nb_day_create = datetime_today - conseiller["dateFinFormation"]
     try:
-        groupeCRAHistorique = conseiller["groupeCRAHistorique"]
+        groupe_cra_historique = conseiller["groupeCRAHistorique"]
     except KeyError:
-        groupeCRAHistorique = None
+        groupe_cra_historique = None
 
     return {
         "conseiller_id": conseiller["_id"],
@@ -86,7 +86,7 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
         "meanCraBySemaine": mean_cra_by_week,
         "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None,
         "countCra": count_cras_conseiller,
-        "groupeCRAHistorique": groupeCRAHistorique
+        "groupeCRAHistorique": groupe_cra_historique
     }
 
 
