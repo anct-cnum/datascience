@@ -120,5 +120,6 @@ def create_dataframe_prod():
     })
 
     for conseiller in conseillers:
+        print(conseiller)
         data_conseiller.append(create_feature_cra_prod(conseiller, db, datetime_today))
     return data_conseiller
