@@ -59,7 +59,7 @@ for index, conseiller in result.iterrows():
                     "groupeCRA": conseiller['cluster']
                 }}])
 
-            db.conseillers.update_one(
+            db.test_conseillers.update_one(
                 {
                     '_id': ObjectId(conseiller['conseiller_id'])},
                 {
@@ -71,12 +71,12 @@ for index, conseiller in result.iterrows():
                     }})
 
     else:
-        db.conseillers.update_one(
+        db.test_conseillers.update_one(
             {
                 '_id': ObjectId(conseiller['conseiller_id'])},
             {'$set': {"groupeCRA": conseiller['cluster']}})
 
-        db.conseillers.update_one(
+        db.test_conseillers.update_one(
             {
                 '_id': ObjectId(conseiller['conseiller_id'])},
             {
