@@ -47,6 +47,8 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
 def create_feature_cra_prod(conseiller, db, datetime_today):
     count_cras_conseiller = db.test_cras.count_documents(
         {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))})
+
+    print(count_cras_conseiller)
     nb_day_last_cra = None
     number_of_week = []
     freq_between_cra = []
