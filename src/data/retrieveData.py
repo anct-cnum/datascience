@@ -47,6 +47,7 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
 def create_feature_cra_prod(conseiller, db, datetime_today):
     count_cras_conseiller = db.cras.count_documents(
         {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))})
+
     nb_day_last_cra = None
     number_of_week = []
     freq_between_cra = []
@@ -71,6 +72,11 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
             mean_cra_by_week = sum(count_nb_cra_by_week.values()) / datetime_today.isocalendar()[1]
 
     nb_day_create = datetime_today - conseiller["dateFinFormation"]
+    try:
+        groupe_cra_historique = conseiller["groupeCRAHistorique"]
+    except KeyError:
+        groupe_cra_historique = None
+
     return {
         "conseiller_id": conseiller["_id"],
         "nom": conseiller["nom"],
@@ -80,7 +86,8 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
         "nbJourLastCra": nb_day_last_cra,
         "meanCraBySemaine": mean_cra_by_week,
         "freqMeanCra": statistics.mean(freq_between_cra) if len(freq_between_cra) > 0 else None,
-        "countCra": count_cras_conseiller
+        "countCra": count_cras_conseiller,
+        "groupeCRAHistorique": groupe_cra_historique
     }
 
 
@@ -112,6 +119,7 @@ def create_dataframe_prod():
             {'dateFinFormation': {'$lt': datetime_today - relativedelta(months=1)}}
         ]
     })
+
     for conseiller in conseillers:
         data_conseiller.append(create_feature_cra_prod(conseiller, db, datetime_today))
     return data_conseiller
