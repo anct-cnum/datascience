@@ -36,17 +36,17 @@ for index, conseiller in result.iterrows():
     if conseiller["groupeCRAHistorique"] is not None:
         last_cluster = conseiller['groupeCRAHistorique'][-1]
         if last_cluster["numero"] != conseiller['cluster'] and check_change_cluster(conseiller['cluster'], last_cluster["numero"]):
-            db.test_conseillers.update_one(
+            db.conseillers.update_one(
                 {
                     '_id': ObjectId(conseiller['conseiller_id']),
                     'groupeCRAHistorique': { '$elemMatch': {'dateDeChangement': last_cluster['dateDeChangement']}}},
                 {
                     '$set': {
-                        "groupeCRAHistorique.$.nbJourDansGroupe" : (datetime_today - last_cluster["dateDeChangement"]).days,
+                        "groupeCRAHistorique.$.nbJourDansGroupe": (datetime_today - last_cluster["dateDeChangement"]).days,
                         "groupeCRA": conseiller['cluster']
                     }
                 })
-            db.test_conseillers.update_one(
+            db.conseillers.update_one(
                 {
                     '_id': ObjectId(conseiller['conseiller_id'])},
                 {
@@ -58,7 +58,7 @@ for index, conseiller in result.iterrows():
                     }})
 
     else:
-        db.test_conseillers.update_one(
+        db.conseillers.update_one(
             {
                 '_id': ObjectId(conseiller['conseiller_id'])},
             {

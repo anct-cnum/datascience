@@ -45,8 +45,8 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
 
 
 def create_feature_cra_prod(conseiller, db, datetime_today):
-    count_cras_conseiller = db.test_cras.count_documents(
-        {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_TEST'))})
+    count_cras_conseiller = db.cras.count_documents(
+        {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))})
 
     nb_day_last_cra = None
     number_of_week = []
@@ -54,8 +54,8 @@ def create_feature_cra_prod(conseiller, db, datetime_today):
     temp_datetime = None
     mean_cra_by_week = None
     if count_cras_conseiller > 0:
-        cras_conseiller = db.test_cras.find(
-            {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_TEST'))}).sort(
+        cras_conseiller = db.cras.find(
+            {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))}).sort(
             'createdAt', pymongo.ASCENDING)
         for index, cra in enumerate(cras_conseiller):
             if temp_datetime is not None:
@@ -111,7 +111,7 @@ def create_dataframe_prod():
     db = connect_db_prod()
     datetime_today = datetime.now()
     data_conseiller = []
-    conseillers = db.test_conseillers.find({
+    conseillers = db.conseillers.find({
         'statut': {'$eq': 'RECRUTE'},
         '$and': [
             {'dateFinFormation': {'$ne': None}},
