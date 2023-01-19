@@ -3,9 +3,6 @@ import statistics
 from collections import Counter
 import pymongo
 from datetime import datetime
-
-from bson import DBRef
-
 from ..mongodb import connect_db_datalake, connect_db_prod
 from dateutil.relativedelta import relativedelta
 
@@ -45,18 +42,14 @@ def create_feature_cra_datalake(conseiller, db, datetime_today):
 
 
 def create_feature_cra_prod(conseiller, db, datetime_today):
-    count_cras_conseiller = db.cras.count_documents(
-        {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))})
-
+    count_cras_conseiller = db.cras.count_documents({ 'conseiller.$id': conseiller["_id"] })
     nb_day_last_cra = None
     number_of_week = []
     freq_between_cra = []
     temp_datetime = None
     mean_cra_by_week = None
     if count_cras_conseiller > 0:
-        cras_conseiller = db.cras.find(
-            {'conseiller': DBRef("conseillers", conseiller["_id"], os.environ.get('MONGO_DATABASE_PROD'))}).sort(
-            'createdAt', pymongo.ASCENDING)
+        cras_conseiller = db.cras.find({ 'conseiller.$id': conseiller["_id"] }).sort('createdAt', pymongo.ASCENDING)
         for index, cra in enumerate(cras_conseiller):
             if temp_datetime is not None:
                 freq_between_cra.append((cra['createdAt'] - temp_datetime).days)
@@ -113,9 +106,10 @@ def create_dataframe_prod():
     data_conseiller = []
     conseillers = db.conseillers.find({
         'statut': {'$eq': 'RECRUTE'},
+        'estCoordinateur': { '$ne': True },
         '$and': [
             {'dateFinFormation': {'$ne': None}},
-            {'emailCN.address': { "$exists": "false" }},
+            {'emailCN.address': { "$exists": True }},
             {'dateFinFormation': {'$lt': datetime_today - relativedelta(months=1)}}
         ]
     })
