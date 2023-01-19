@@ -22,10 +22,8 @@ result = pd.concat([dataframe_conseiller, df_without_nan['cluster']], axis=1)
 result.loc[result.nbJourLastCra >= 30, 'cluster'] = 3
 # conseiller n'ayant jamais déposer de cra
 result.loc[result.nbJourLastCra.isnull(), 'cluster'] = 4
-# conseiller n'ayant pas déposer de cra cette année
-result.loc[(result.nbJourLastCra < 30) & (result.meanCraBySemaine.isnull()), 'cluster'] = 5
-# conseiller n'ayant déposé qu'un seul cra
-result.loc[(result.nbJourLastCra < 30) & (result.freqMeanCra.isnull()), 'cluster'] = 5
+# conseiller n'ayant pas déposer de cra cette année ou conseiller n'ayant déposé qu'un seul cra
+result.loc[(result.nbJourLastCra < 30) & (result.meanCraBySemaine.isnull()) | (result.freqMeanCra.isnull()), 'cluster'] = 5
 result['cluster'] = result['cluster'].astype('Int64')
 datetime_today = datetime.now()
 for index, conseiller in result.iterrows():
