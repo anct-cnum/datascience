@@ -2,7 +2,7 @@ pymongo
 pandas
 numpy
 python-dotenv
-sklearn
+scikit-learn
 seaborn
 matplotlib
 python-dateutil
